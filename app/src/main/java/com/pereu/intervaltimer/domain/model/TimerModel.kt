@@ -1,6 +1,6 @@
 package com.pereu.intervaltimer.domain.model
 
-data class Timer(
+data class TimerModel(
     val id: Int,
     val title: String,
     val totalTime: Int,

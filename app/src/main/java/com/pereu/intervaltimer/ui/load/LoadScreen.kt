@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pereu.intervaltimer.R
-import com.pereu.intervaltimer.domain.model.Timer
+import com.pereu.intervaltimer.domain.model.TimerModel
 import com.pereu.intervaltimer.ui.components.LoadButton
 import com.pereu.intervaltimer.ui.components.LoadButtonState
 import com.pereu.intervaltimer.ui.components.OutLinedTextField
@@ -35,34 +35,33 @@ import com.pereu.intervaltimer.ui.theme.Size
 import com.pereu.intervaltimer.ui.theme.Spacing
 import com.pereu.intervaltimer.ui.theme.TextPrimary
 import com.pereu.intervaltimer.ui.theme.TextSecondary
-import com.pereu.intervaltimer.util.Resource
 
 @Composable
 fun LoadScreen(
-    onTimerLoaded: (Timer) -> Unit,
+    onTimerLoaded: (TimerModel) -> Unit,
     viewModel: LoadViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is LoadSideEffect.NavigateToTimer -> onTimerLoaded(effect.timer)
+            }
+        }
+    }
+
     LoadScreenContent(
         state = state,
-        onIntent = viewModel::handleIntent,
-        onTimerLoaded = onTimerLoaded
+        onIntent = viewModel::handleIntent
     )
 }
 
 @Composable
 private fun LoadScreenContent(
     state: LoadUiState,
-    onIntent: (LoadIntent) -> Unit,
-    onTimerLoaded: (Timer) -> Unit
+    onIntent: (LoadIntent) -> Unit
 ) {
-
-    LaunchedEffect(state.resource) {
-        if (state.resource is Resource.Success) {
-            onTimerLoaded((state.resource).data)
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -123,8 +122,7 @@ private fun LoadScreenIdlePreview() {
     IntervalTimerTheme {
         LoadScreenContent(
             state = LoadUiState(),
-            onIntent = {},
-            onTimerLoaded = {}
+            onIntent = {}
         )
     }
 }
@@ -140,8 +138,7 @@ private fun LoadScreenLoadingPreview() {
                     isLoading = true
                 )
             ),
-            onIntent = {},
-            onTimerLoaded = {}
+            onIntent = {}
         )
     }
 }
@@ -152,7 +149,6 @@ private fun LoadScreenErrorPreview() {
     IntervalTimerTheme {
         LoadScreenContent(
             state = LoadUiState(
-                resource = Resource.Error(Exception()),
                 btnState = LoadButtonState(titleRes = R.string.load_button_retry),
                 timerIdInputState = OutlinedTextFieldState(
                     value = "68",
@@ -161,8 +157,7 @@ private fun LoadScreenErrorPreview() {
                     errorRes = R.string.error_timer_not_found
                 )
             ),
-            onIntent = {},
-            onTimerLoaded = {}
+            onIntent = {}
         )
     }
 }

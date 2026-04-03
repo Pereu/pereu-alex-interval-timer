@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.pereu.intervaltimer.domain.usecase.GetTimerUseCase
 import com.pereu.intervaltimer.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +20,9 @@ class LoadViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(LoadUiState())
     val state: StateFlow<LoadUiState> = _state
+
+    private val _sideEffect = MutableSharedFlow<LoadSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
     fun handleIntent(intent: LoadIntent) {
         when (intent) {
@@ -42,17 +47,11 @@ class LoadViewModel @Inject constructor(
 
             when (val result = getTimerUseCase(id)) {
                 is Resource.Success -> {
-                    _state.update {
-                        it.copy(
-                            resource = result,
-                            btnState = it.btnState.copy(isLoading = false)
-                        )
-                    }
+                    _sideEffect.emit(LoadSideEffect.NavigateToTimer(result.data))
                 }
                 is Resource.Error -> {
                     _state.update {
                         it.copy(
-                            resource = result,
                             btnState = it.btnState.copy(isLoading = false),
                             timerIdInputState = it.timerIdInputState.copy(isError = true)
                         )
