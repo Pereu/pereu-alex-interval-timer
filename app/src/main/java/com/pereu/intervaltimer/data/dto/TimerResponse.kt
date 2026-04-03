@@ -1,4 +1,4 @@
-package com.pereu.intervaltimer.data.api.dto
+package com.pereu.intervaltimer.data.dto
 
 import com.google.gson.annotations.SerializedName
 
