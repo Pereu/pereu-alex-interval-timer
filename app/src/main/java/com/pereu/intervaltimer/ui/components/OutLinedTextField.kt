@@ -57,7 +57,6 @@ fun OutLinedTextField(
         )
 
         if (state.isError && state.errorRes != null) {
-
             Text(
                 text = stringResource(state.errorRes),
                 style = CaptionStyle,

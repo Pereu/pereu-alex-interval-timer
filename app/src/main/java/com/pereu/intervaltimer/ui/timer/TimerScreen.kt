@@ -1,0 +1,21 @@
+package com.pereu.intervaltimer.ui.timer
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+
+@Composable
+fun TimerScreen(
+    timerId: Int,
+    onBack: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("TimerScreen — id: $timerId")
+    }
+}

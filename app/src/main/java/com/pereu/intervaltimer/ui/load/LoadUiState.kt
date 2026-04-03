@@ -10,7 +10,7 @@ import com.pereu.intervaltimer.util.Resource
 
 @Immutable
 data class LoadUiState(
-    val timerId: String = "68",
+    val timerId: String = "",
     val resource: Resource<Timer>? = null,
     val btnState: LoadButtonState = LoadButtonState(titleRes = R.string.load_button_load),
     val inputState: OutlinedTextFieldState = OutlinedTextFieldState(

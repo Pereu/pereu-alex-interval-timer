@@ -71,6 +71,7 @@ private fun LoadScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
         // Иконка
         Box(
             modifier = Modifier
@@ -118,12 +119,10 @@ private fun LoadScreenContent(
 
 @Preview(showBackground = true, name = "Idle")
 @Composable
-fun LoadScreenPreview() {
+private fun LoadScreenIdlePreview() {
     IntervalTimerTheme {
         LoadScreenContent(
-            state = LoadUiState(
-                btnState = LoadButtonState()
-            ),
+            state = LoadUiState(),
             onIntent = {},
             onTimerLoaded = {}
         )
