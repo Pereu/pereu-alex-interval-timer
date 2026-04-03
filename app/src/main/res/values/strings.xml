@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Interval Timer</string>
+    <string name="load_button_load">Загрузить</string>
+    <string name="load_button_loading">Загрузка...</string>
+    <string name="load_button_retry">Повторить</string>
+    <string name="empty" />
 </resources>
