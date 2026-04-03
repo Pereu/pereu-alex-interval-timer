@@ -35,7 +35,7 @@ class LoadViewModel @Inject constructor(
                 )
             }
 
-            is LoadIntent.LoadClicked -> loadTimer(_state.value.timerIdInputState.value)
+            is LoadIntent.LoadClicked -> loadTimer(id =_state.value.timerIdInputState.value)
         }
     }
 
