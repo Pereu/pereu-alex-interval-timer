@@ -5,5 +5,7 @@
     <string name="load_button_retry">Повторить</string>
     <string name="label_timer_id">ID тренировки</string>
     <string name="error_timer_not_found">Тренировка не найдена. Проверьте ID.</string>
+    <string name="app_title">Интервальный\nтаймер</string>
+    <string name="app_subtitle">Введите ID тренировки для загрузки программы интервалов</string>
     <string name="empty" />
 </resources>

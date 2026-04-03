@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.pereu.intervaltimer.R
 import com.pereu.intervaltimer.ui.theme.CaptionStyle
+import com.pereu.intervaltimer.ui.theme.Error
 import com.pereu.intervaltimer.ui.theme.Primary
 import com.pereu.intervaltimer.ui.theme.Spacing
 import com.pereu.intervaltimer.ui.theme.TextSecondary
