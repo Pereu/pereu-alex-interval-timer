@@ -47,6 +47,11 @@ class LoadViewModel @Inject constructor(
 
             when (val result = getTimerUseCase(id)) {
                 is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            btnState = it.btnState.copy(isLoading = false),
+                        )
+                    }
                     _sideEffect.emit(LoadSideEffect.NavigateToTimer(result.data))
                 }
                 is Resource.Error -> {

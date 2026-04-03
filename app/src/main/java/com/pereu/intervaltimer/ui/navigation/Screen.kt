@@ -2,22 +2,22 @@ package com.pereu.intervaltimer.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import com.pereu.intervaltimer.ui.SharedViewModel
 import com.pereu.intervaltimer.ui.load.LoadScreen
 import com.pereu.intervaltimer.ui.timer.TimerScreen
 
 sealed class Screen(val route: String) {
     object Load : Screen("load")
-    object Timer : Screen("timer/{timerId}") {
-        fun createRoute(timerId: Int) = "timer/$timerId"
-    }
+    object Timer : Screen("timer")
 }
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(
+    navController: NavHostController,
+    sharedViewModel: SharedViewModel
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.Load.route
@@ -25,16 +25,14 @@ fun NavGraph(navController: NavHostController) {
         composable(Screen.Load.route) {
             LoadScreen(
                 onTimerLoaded = { timer ->
-                    navController.navigate(Screen.Timer.createRoute(timer.id))
+                    sharedViewModel.setTimer(timer)
+                    navController.navigate(Screen.Timer.route)
                 }
             )
         }
-        composable(
-            route = Screen.Timer.route,
-            arguments = listOf(navArgument("timerId") { type = NavType.IntType })
-        ) { backStackEntry ->
+        composable(route = Screen.Timer.route) {
             TimerScreen(
-                timerId = backStackEntry.arguments?.getInt("timerId") ?: 0,
+                sharedViewModel = sharedViewModel,
                 onBack = { navController.popBackStack() }
             )
         }

@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.pereu.intervaltimer.ui.SharedViewModel
 import com.pereu.intervaltimer.ui.theme.IntervalTimerTheme
 import com.pereu.intervaltimer.ui.navigation.NavGraph
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,7 +20,11 @@ class MainActivity : ComponentActivity() {
             IntervalTimerTheme {
                 IntervalTimerTheme {
                     val navController = rememberNavController()
-                    NavGraph(navController = navController)
+                    val sharedViewModel: SharedViewModel = hiltViewModel()
+                    NavGraph(
+                        navController = navController,
+                        sharedViewModel = sharedViewModel
+                    )
                 }
             }
         }
