@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.pereu.intervaltimer.ui.theme.IntervalTimerTheme
-import com.pereu.intervaltimer.ui.theme.navigation.NavGraph
+import com.pereu.intervaltimer.ui.navigation.NavGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

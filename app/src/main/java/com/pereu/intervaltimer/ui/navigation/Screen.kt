@@ -1,4 +1,4 @@
-package com.pereu.intervaltimer.ui.theme.navigation
+package com.pereu.intervaltimer.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
