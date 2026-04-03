@@ -21,16 +21,44 @@ class LoadViewModel @Inject constructor(
 
     fun handleIntent(intent: LoadIntent) {
         when (intent) {
-            is LoadIntent.IdChanged -> _state.update { it.copy(timerId = intent.id) }
-            is LoadIntent.LoadClicked -> loadTimer(_state.value.timerId)
+            is LoadIntent.IdChanged -> _state.update {
+                it.copy(
+                    timerIdInputState = it.timerIdInputState.copy(
+                        value = intent.value,
+                        isError = false
+                    )
+                )
+            }
+
+            is LoadIntent.LoadClicked -> loadTimer(_state.value.timerIdInputState.value)
         }
     }
 
     private fun loadTimer(id: String) {
         viewModelScope.launch {
-            _state.update { it.copy(resource = Resource.Loading) }
-            val result = getTimerUseCase(id)
-            _state.update { it.copy(resource = result) }
+            _state.update {
+                it.copy(btnState = it.btnState.copy(isLoading = true))
+            }
+
+            when (val result = getTimerUseCase(id)) {
+                is Resource.Success -> {
+                    _state.update {
+                        it.copy(
+                            resource = result,
+                            btnState = it.btnState.copy(isLoading = false)
+                        )
+                    }
+                }
+                is Resource.Error -> {
+                    _state.update {
+                        it.copy(
+                            resource = result,
+                            btnState = it.btnState.copy(isLoading = false),
+                            timerIdInputState = it.timerIdInputState.copy(isError = true)
+                        )
+                    }
+                }
+            }
         }
     }
 }

@@ -104,7 +104,7 @@ private fun LoadScreenContent(
         Spacer(modifier = Modifier.height(Spacing.xl2 + Spacing.s))
 
         OutLinedTextField(
-            state = state.inputState,
+            state = state.timerIdInputState,
             onValueChange = { onIntent(LoadIntent.IdChanged(it)) }
         )
 
@@ -135,7 +135,6 @@ private fun LoadScreenLoadingPreview() {
     IntervalTimerTheme {
         LoadScreenContent(
             state = LoadUiState(
-                resource = Resource.Loading,
                 btnState = LoadButtonState(
                     titleRes = R.string.load_button_loading,
                     isLoading = true
@@ -155,7 +154,7 @@ private fun LoadScreenErrorPreview() {
             state = LoadUiState(
                 resource = Resource.Error(Exception()),
                 btnState = LoadButtonState(titleRes = R.string.load_button_retry),
-                inputState = OutlinedTextFieldState(
+                timerIdInputState = OutlinedTextFieldState(
                     value = "68",
                     isError = true,
                     labelRes = R.string.label_timer_id,
