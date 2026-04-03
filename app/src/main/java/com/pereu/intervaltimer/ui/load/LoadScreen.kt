@@ -5,14 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,16 +16,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pereu.intervaltimer.domain.model.Timer
-import com.pereu.intervaltimer.ui.components.PrimaryButton
+import com.pereu.intervaltimer.ui.components.LoadButton
+import com.pereu.intervaltimer.ui.components.LoadButtonState
+import com.pereu.intervaltimer.ui.components.OutLinedTextField
 import com.pereu.intervaltimer.ui.theme.BodyStyle
-import com.pereu.intervaltimer.ui.theme.CaptionStyle
-import com.pereu.intervaltimer.ui.theme.Error
 import com.pereu.intervaltimer.ui.theme.H1Style
 import com.pereu.intervaltimer.ui.theme.IntervalTimerTheme
 import com.pereu.intervaltimer.ui.theme.Primary
@@ -59,6 +54,7 @@ private fun LoadScreenContent(
     onIntent: (LoadIntent) -> Unit,
     onTimerLoaded: (Timer) -> Unit
 ) {
+
     LaunchedEffect(state.resource) {
         if (state.resource is Resource.Success) {
             onTimerLoaded((state.resource).data)
@@ -104,45 +100,14 @@ private fun LoadScreenContent(
 
         Spacer(modifier = Modifier.height(Spacing.xl2 + Spacing.s))
 
-        // Поле ввода
-        val isError = state.resource is Resource.Error
-
-        Column(modifier = Modifier.fillMaxWidth()) {
-
-            Text(
-                text = "ID тренировки",
-                style = CaptionStyle,
-                color = TextSecondary
-            )
-
-            Spacer(modifier = Modifier.height(Spacing.xs))
-
-            OutlinedTextField(
-                value = state.timerId,
-                onValueChange = { onIntent(LoadIntent.IdChanged(it)) },
-                modifier = Modifier.fillMaxWidth(),
-                isError = isError,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                shape = MaterialTheme.shapes.medium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Primary,
-                    errorBorderColor = Error
-                )
-            )
-
-            if (isError) {
-                Spacer(modifier = Modifier.height(Spacing.xs))
-                Text(
-                    text = "Тренировка не найдена. Проверьте ID.",
-                    style = CaptionStyle,
-                    color = Error
-                )
-            }
-        }
+        OutLinedTextField(
+            state = state.inputState,
+            onValueChange = { onIntent(LoadIntent.IdChanged(it)) }
+        )
 
         Spacer(modifier = Modifier.height(Spacing.l))
 
-        PrimaryButton(
+        LoadButton(
             state = state.btnState,
             onClick = { onIntent(LoadIntent.LoadClicked) }
         )
@@ -154,7 +119,9 @@ private fun LoadScreenContent(
 fun LoadScreenPreview() {
     IntervalTimerTheme {
         LoadScreenContent(
-            state = LoadUiState(),
+            state = LoadUiState(
+                btnState = LoadButtonState()
+            ),
             onIntent = {},
             onTimerLoaded = {}
         )
