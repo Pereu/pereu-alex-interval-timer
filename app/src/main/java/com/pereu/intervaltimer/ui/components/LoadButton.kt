@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -16,7 +17,8 @@ import com.pereu.intervaltimer.ui.theme.*
 data class PrimaryButtonState(
     @get:StringRes val titleRes: Int = R.string.empty,
     val enabled: Boolean = true,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val containerColor: Color = Primary
 )
 
 @Composable
@@ -33,7 +35,7 @@ fun PrimaryButton(
         enabled = state.enabled && !state.isLoading,
         shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Primary,
+            containerColor = state.containerColor,
             disabledContainerColor = DisabledBg
         )
     ) {
@@ -61,17 +63,20 @@ private fun PrimaryButtonPreview() {
         ) {
             PrimaryButton(
                 state = PrimaryButtonState(titleRes = R.string.load_button_load),
-                onClick = {})
+                onClick = {}
+            )
             PrimaryButton(
                 state = PrimaryButtonState(
                     titleRes = R.string.load_button_loading,
                     isLoading = true
-                ), onClick = {})
+                ), onClick = {}
+            )
             PrimaryButton(
                 state = PrimaryButtonState(
                     titleRes = R.string.load_button_retry,
                     enabled = false
-                ), onClick = {})
+                ), onClick = {}
+            )
         }
     }
 }

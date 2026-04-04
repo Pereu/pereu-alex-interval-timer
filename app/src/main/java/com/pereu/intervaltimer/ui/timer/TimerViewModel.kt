@@ -2,31 +2,34 @@ package com.pereu.intervaltimer.ui.timer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pereu.intervaltimer.domain.model.TimerModel
 import com.pereu.intervaltimer.ui.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TimerViewModel @Inject constructor(
-    private val sharedViewModel: SharedViewModel,
     private val mapper: TimerUiStateMapper
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TimerUiState())
     val state: StateFlow<TimerUiState> = _state
 
+    private val _sideEffect = MutableSharedFlow<TimerSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
+
     private var timerJob: Job? = null
 
-    init {
-        sharedViewModel.timer.value?.let { timer ->
-            _state.update { mapper.toInitialUiState(timer) }
-        }
+    fun init(timer: TimerModel) {
+        _state.update { mapper.toInitialUiState(timer) }
     }
 
     fun handleIntent(intent: TimerIntent) {
@@ -35,7 +38,13 @@ class TimerViewModel @Inject constructor(
             is TimerIntent.Pause -> pause()
             is TimerIntent.Resume -> start()
             is TimerIntent.Reset -> reset()
-            is TimerIntent.NewWorkout -> TODO()
+            is TimerIntent.NewWorkout -> navigateBack()
+        }
+    }
+
+    private fun navigateBack() {
+        viewModelScope.launch {
+            _sideEffect.emit(TimerSideEffect.NavigateBack)
         }
     }
 
@@ -57,9 +66,9 @@ class TimerViewModel @Inject constructor(
 
     private fun reset() {
         timerJob?.cancel()
-        sharedViewModel.timer.value?.let { timer ->
-            _state.update { mapper.toInitialUiState(timer) }
-        }
+//        sharedViewModel.timer.value?.let { timer ->
+//            _state.update { mapper.toInitialUiState(timer) }
+//        }
     }
 
     private fun tick() {

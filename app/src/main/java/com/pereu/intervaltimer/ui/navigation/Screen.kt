@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pereu.intervaltimer.ui.SharedViewModel
 import com.pereu.intervaltimer.ui.load.LoadScreen
-import com.pereu.intervaltimer.ui.timer.TimerScreen
+import com.pereu.intervaltimer.ui.timer.screen.TimerScreen
 
 sealed class Screen(val route: String) {
     object Load : Screen("load")
@@ -33,7 +33,8 @@ fun NavGraph(
         composable(route = Screen.Timer.route) {
             TimerScreen(
                 sharedViewModel = sharedViewModel,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onNewWorkout = { navController.popBackStack() }
             )
         }
     }

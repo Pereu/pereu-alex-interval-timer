@@ -3,10 +3,10 @@ package com.pereu.intervaltimer.ui.timer.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.pereu.intervaltimer.R
 import com.pereu.intervaltimer.ui.components.GhostButton
+import com.pereu.intervaltimer.ui.components.GhostButtonState
 import com.pereu.intervaltimer.ui.components.PrimaryButton
 import com.pereu.intervaltimer.ui.components.PrimaryButtonState
 import com.pereu.intervaltimer.ui.theme.*
@@ -24,6 +24,7 @@ fun TimerBottomButtons(
             .padding(horizontal = Spacing.xl2),
         verticalArrangement = Arrangement.spacedBy(Spacing.s)
     ) {
+
         when (status) {
             TimerStatus.Idle -> {
                 PrimaryButton(
@@ -37,7 +38,7 @@ fun TimerBottomButtons(
                     onClick = { onIntent(TimerIntent.Pause) }
                 )
                 GhostButton(
-                    text = stringResource(R.string.timer_btn_reset),
+                    state = GhostButtonState(titleRes = R.string.timer_btn_reset),
                     onClick = { onIntent(TimerIntent.Reset) }
                 )
             }
@@ -47,17 +48,26 @@ fun TimerBottomButtons(
                     onClick = { onIntent(TimerIntent.Resume) }
                 )
                 GhostButton(
-                    text = stringResource(R.string.timer_btn_reset),
+                    state = GhostButtonState(titleRes = R.string.timer_btn_reset),
                     onClick = { onIntent(TimerIntent.Reset) }
                 )
             }
+
             TimerStatus.Completed -> {
                 PrimaryButton(
-                    state = PrimaryButtonState(titleRes = R.string.timer_btn_restart),
+                    state = PrimaryButtonState(
+                        titleRes = R.string.timer_btn_restart,
+                        containerColor = Secondary
+                    ),
                     onClick = { onIntent(TimerIntent.Reset) }
                 )
+
                 GhostButton(
-                    text = stringResource(R.string.timer_btn_new),
+                    state = GhostButtonState(
+                        titleRes = R.string.timer_btn_new,
+                        borderColor = DisabledText,
+                        textColor = TextPrimary
+                    ),
                     onClick = { onIntent(TimerIntent.NewWorkout) }
                 )
             }
