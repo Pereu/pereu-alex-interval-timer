@@ -1,6 +1,12 @@
 package com.pereu.intervaltimer.ui.timer.screen
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -9,7 +15,11 @@ import com.pereu.intervaltimer.ui.components.GhostButton
 import com.pereu.intervaltimer.ui.components.GhostButtonState
 import com.pereu.intervaltimer.ui.components.PrimaryButton
 import com.pereu.intervaltimer.ui.components.PrimaryButtonState
-import com.pereu.intervaltimer.ui.theme.*
+import com.pereu.intervaltimer.ui.theme.DisabledText
+import com.pereu.intervaltimer.ui.theme.IntervalTimerTheme
+import com.pereu.intervaltimer.ui.theme.Secondary
+import com.pereu.intervaltimer.ui.theme.Spacing
+import com.pereu.intervaltimer.ui.theme.TextPrimary
 import com.pereu.intervaltimer.ui.timer.TimerIntent
 import com.pereu.intervaltimer.ui.timer.TimerStatus
 
@@ -18,6 +28,7 @@ fun TimerBottomButtons(
     status: TimerStatus,
     onIntent: (TimerIntent) -> Unit
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -28,13 +39,19 @@ fun TimerBottomButtons(
         when (status) {
             TimerStatus.Idle -> {
                 PrimaryButton(
-                    state = PrimaryButtonState(titleRes = R.string.timer_btn_start),
+                    state = PrimaryButtonState(
+                        titleRes = R.string.timer_btn_start,
+                        icon = Icons.Default.PlayArrow
+                    ),
                     onClick = { onIntent(TimerIntent.Start) }
                 )
             }
             TimerStatus.Running -> {
                 PrimaryButton(
-                    state = PrimaryButtonState(titleRes = R.string.timer_btn_pause),
+                    state = PrimaryButtonState(
+                        titleRes = R.string.timer_btn_pause,
+                        icon = Icons.Default.Pause
+                    ),
                     onClick = { onIntent(TimerIntent.Pause) }
                 )
                 GhostButton(
@@ -44,7 +61,10 @@ fun TimerBottomButtons(
             }
             TimerStatus.Paused -> {
                 PrimaryButton(
-                    state = PrimaryButtonState(titleRes = R.string.timer_btn_resume),
+                    state = PrimaryButtonState(
+                        titleRes = R.string.timer_btn_resume,
+                        icon = Icons.Default.PlayArrow
+                    ),
                     onClick = { onIntent(TimerIntent.Resume) }
                 )
                 GhostButton(

@@ -2,7 +2,15 @@ package com.pereu.intervaltimer.ui.timer.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,13 +27,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pereu.intervaltimer.R
-import com.pereu.intervaltimer.ui.theme.*
+import com.pereu.intervaltimer.ui.theme.CaptionStyle
+import com.pereu.intervaltimer.ui.theme.DisabledBg
+import com.pereu.intervaltimer.ui.theme.IntervalTimerTheme
+import com.pereu.intervaltimer.ui.theme.LabelStyle
+import com.pereu.intervaltimer.ui.theme.MonoStyle
+import com.pereu.intervaltimer.ui.theme.Orange
+import com.pereu.intervaltimer.ui.theme.OrangeLight
+import com.pereu.intervaltimer.ui.theme.Primary
+import com.pereu.intervaltimer.ui.theme.PrimaryLight
+import com.pereu.intervaltimer.ui.theme.Radius
+import com.pereu.intervaltimer.ui.theme.Size
+import com.pereu.intervaltimer.ui.theme.Spacing
+import com.pereu.intervaltimer.ui.theme.Surface
+import com.pereu.intervaltimer.ui.theme.TextPrimary
+import com.pereu.intervaltimer.ui.theme.TextSecondary
+import com.pereu.intervaltimer.ui.theme.TextTertiary
 import com.pereu.intervaltimer.ui.timer.IntervalStatus
 import com.pereu.intervaltimer.ui.timer.IntervalUiState
 import com.pereu.intervaltimer.ui.timer.TimerStatus
@@ -57,10 +79,16 @@ fun IntervalsList(
                 style = LabelStyle,
                 color = TextPrimary
             )
+
+            val isCompleted = timerStatus == TimerStatus.Completed
+
             Text(
-                text = "${currentIndex + 1} из ${intervals.size}",
+                text = if (isCompleted)
+                    "${intervals.size} из ${intervals.size} ✓"
+                else
+                    "${currentIndex + 1} из ${intervals.size}",
                 style = CaptionStyle,
-                color = TextSecondary
+                color = if (!isCompleted) TextSecondary else TextSecondary.copy(alpha = 0.5f)
             )
         }
 
@@ -89,7 +117,7 @@ fun IntervalItem(
     val isActive = interval.status == IntervalStatus.Active
 
     val activeColor = if (timerStatus == TimerStatus.Paused) Orange else Primary
-    val activeBgColor = if (timerStatus == TimerStatus.Paused) Color(0x14E67E22) else PrimaryLight
+    val activeBgColor = if (timerStatus == TimerStatus.Paused) OrangeLight else PrimaryLight
 
     Row(
         modifier = Modifier

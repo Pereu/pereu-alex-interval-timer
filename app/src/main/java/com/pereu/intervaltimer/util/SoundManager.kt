@@ -14,7 +14,7 @@ class SoundManager @Inject constructor() {
     )
 
     fun playStart() {
-        toneGenerator.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 500)
+        toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 3000)
     }
 
     fun playIntervalChange() {
@@ -22,7 +22,7 @@ class SoundManager @Inject constructor() {
     }
 
     fun playFinish() {
-        toneGenerator.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 750)
+        toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 200)
     }
 
     fun release() {

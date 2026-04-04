@@ -15,13 +15,19 @@
     <string name="timer_topbar_completed">Завершена</string>
     <string name="timer_progress_label">Прошло %1$s из %2$s</string>
     <string name="intervals_title">Интервалы</string>
-    <string name="timer_btn_start">▶ Старт</string>
-    <string name="timer_btn_pause">⏸ Пауза</string>
-    <string name="timer_btn_resume">▶ Продолжить</string>
+    <string name="timer_btn_start">Старт</string>
+    <string name="timer_btn_pause">Пауза</string>
+    <string name="timer_btn_resume">Продолжить</string>
     <string name="timer_btn_reset">Сбросить тренировку</string>
     <string name="timer_btn_restart">↺ Запустить заново</string>
     <string name="timer_btn_new">Новая тренировка</string>
     <string name="timer_status_completed_subtitle">Отличная работа!</string>
     <string name="timer_total_time_label">Общее время</string>
+    <plurals name="intervals_count">
+        <item quantity="one">интервал</item>
+        <item quantity="few">интервала</item>
+        <item quantity="many">интервалов</item>
+        <item quantity="other">интервалов</item>
+    </plurals>
     <string name="empty" />
 </resources>

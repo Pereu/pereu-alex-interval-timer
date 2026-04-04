@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,7 +20,8 @@ data class PrimaryButtonState(
     @get:StringRes val titleRes: Int = R.string.empty,
     val enabled: Boolean = true,
     val isLoading: Boolean = false,
-    val containerColor: Color = Primary
+    val containerColor: Color = Primary,
+    val icon: ImageVector? = null
 )
 
 @Composable
@@ -48,7 +51,21 @@ fun PrimaryButton(
             Spacer(modifier = Modifier.width(Spacing.s))
             Text(stringResource(state.titleRes), style = ButtonStyle, color = TextTertiary)
         } else {
-            Text(stringResource(state.titleRes), style = ButtonStyle, color = Surface)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                state.icon?.let {
+                    Icon(
+                        imageVector = it,
+                        contentDescription = null,
+                        tint = Surface,
+                        modifier = Modifier.size(Spacing.xl)
+                    )
+                    Spacer(modifier = Modifier.width(Spacing.s))
+                }
+                Text(stringResource(state.titleRes), style = ButtonStyle, color = Surface)
+            }
         }
     }
 }

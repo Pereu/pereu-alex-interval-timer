@@ -52,11 +52,11 @@ class LoadViewModel @Inject constructor(
                     IntervalModel(title = "Ходьба в среднем темпе", time = 7),
                     IntervalModel(title = "Ходьба в интенсивном темпе", time = 3),
                     IntervalModel(title = "Ходьба в среднем темпе", time = 1),
-                    IntervalModel(title = "Медленный бег", time = 3),
-                    IntervalModel(title = "Ходьба в среднем темпе", time = 1),
-                    IntervalModel(title = "Ходьба в интенсивном темпе", time = 3),
-                    IntervalModel(title = "Ходьба в среднем темпе", time = 7),
-                    IntervalModel(title = "Медленный бег", time = 3)
+//                    IntervalModel(title = "Медленный бег", time = 3),
+//                    IntervalModel(title = "Ходьба в среднем темпе", time = 1),
+//                    IntervalModel(title = "Ходьба в интенсивном темпе", time = 3),
+//                    IntervalModel(title = "Ходьба в среднем темпе", time = 7),
+//                    IntervalModel(title = "Медленный бег", time = 3)
                 )
             )
             _sideEffect.emit(LoadSideEffect.NavigateToTimer(mockTimer))

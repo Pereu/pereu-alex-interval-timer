@@ -140,7 +140,11 @@ class TimerViewModel @Inject constructor(
         val nextIndex = current.currentIntervalIndex + 1
 
         if (nextIndex >= current.intervals.size) {
-            soundManager.playFinish()
+            viewModelScope.launch {
+                soundManager.playFinish()
+                delay(350)
+                soundManager.playFinish()
+            }
 
             timerJob?.cancel()
             _state.update {

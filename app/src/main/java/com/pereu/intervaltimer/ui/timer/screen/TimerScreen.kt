@@ -1,5 +1,6 @@
 package com.pereu.intervaltimer.ui.timer.screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -83,6 +84,13 @@ private fun TimerScreenContent(
             TimerCard(
                 state = uiState.timerCardState
             )
+
+            AnimatedVisibility(visible = uiState.status == TimerStatus.Completed) {
+                TimerCompletedStats(
+                    totalTimeFormatted = uiState.timerCardState.totalTimeFormatted,
+                    intervalsCount = uiState.intervals.size
+                )
+            }
 
             IntervalsList(
                 intervals = uiState.intervals,
