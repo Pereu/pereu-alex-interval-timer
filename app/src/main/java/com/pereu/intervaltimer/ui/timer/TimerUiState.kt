@@ -55,6 +55,7 @@ data class IntervalUiState(
     val title: String,
     val time: Int,
     val timeFormatted: String,
+    val progress: Float = 0f,
     val status: IntervalStatus = IntervalStatus.Pending
 )
 

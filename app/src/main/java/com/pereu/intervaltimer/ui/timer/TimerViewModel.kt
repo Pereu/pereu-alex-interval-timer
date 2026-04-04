@@ -72,7 +72,14 @@ class TimerViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     remainingIntervalTime = newRemaining,
-                    elapsedTime = newElapsed
+                    elapsedTime = newElapsed,
+                    intervals = it.intervals.mapIndexed { index, interval ->
+                        if (index == it.currentIntervalIndex) {
+                            interval.copy(
+                                progress = 1f - (newRemaining.toFloat() / interval.time)
+                            )
+                        } else interval
+                    }
                 )
             }
         }
@@ -108,6 +115,11 @@ class TimerViewModel @Inject constructor(
                             index < nextIndex -> IntervalStatus.Completed
                             index == nextIndex -> IntervalStatus.Active
                             else -> IntervalStatus.Pending
+                        },
+                        progress = when {
+                            index < nextIndex -> 1f
+                            index == nextIndex -> 0f
+                            else -> 0f
                         }
                     )
                 }
