@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -30,11 +32,18 @@ import com.pereu.intervaltimer.ui.timer.TimerStatus
 
 @Composable
 fun IntervalsList(
+    modifier: Modifier = Modifier,
     intervals: List<IntervalUiState>,
     timerStatus: TimerStatus,
-    currentIndex: Int,
-    modifier: Modifier = Modifier
+    currentIndex: Int
 ) {
+
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(currentIndex) {
+        listState.animateScrollToItem(currentIndex)
+    }
+
     Column(modifier = modifier) {
         // Заголовок
         Row(
@@ -56,6 +65,7 @@ fun IntervalsList(
         }
 
         LazyColumn(
+            state = listState,
             verticalArrangement = Arrangement.spacedBy(Spacing.s)
         ) {
             itemsIndexed(intervals) { index, interval ->

@@ -17,19 +17,20 @@ class TimerUiStateMapper @Inject constructor() {
             )
         }
 
+        val totalTime = timer.totalTime
+
         return TimerUiState(
-            totalTime = timer.totalTime,
             remainingIntervalTime = timer.intervals.first().time,
             currentIntervalIndex = 0,
             intervals = intervals,
             topBarState = TimerTopBarState(
                 title = timer.title,
-                elapsedTimeFormatted = timer.totalTime.toTimeFormatted()
+                elapsedTimeFormatted = totalTime.toTimeFormatted()
             ),
             timerCardState = TimerCardState(
                 intervalTitle = intervals.first().title,
                 remainingTimeFormatted = timer.intervals.first().time.toTimeFormatted(),
-                totalTimeFormatted = timer.totalTime.toTimeFormatted()
+                totalTimeFormatted = totalTime.toTimeFormatted()
             )
         )
     }

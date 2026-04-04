@@ -43,42 +43,47 @@ class LoadViewModel @Inject constructor(
 
     private fun loadTimer(id: String) {
         viewModelScope.launch {
-            _state.update {
-                it.copy(btnState = it.btnState.copy(isLoading = true))
-            }
 
-            when (val result = getTimerUseCase(id)) {
-                is Resource.Success -> {
-                    _state.update {
-                        it.copy(
-                            btnState = it.btnState.copy(isLoading = false),
-                        )
-                    }
-                    _sideEffect.emit(LoadSideEffect.NavigateToTimer(result.data))
-                }
-                is Resource.Error -> {
-                    val mockTimer = TimerModel(
-                        id = 68,
-                        title = "Тренировка 7",
-                        totalTime = 900,
-                        intervals = listOf(
-                            IntervalModel(title = "Ходьба в среднем темпе", time = 300),
-                            IntervalModel(title = "Ходьба в интенсивном темпе", time = 300),
-                            IntervalModel(title = "Ходьба в среднем темпе", time = 120),
-                            IntervalModel(title = "Медленный бег", time = 30)
-                        )
-                    )
-                    _sideEffect.emit(LoadSideEffect.NavigateToTimer(mockTimer))
-                    _state.update { it.copy(btnState = it.btnState.copy(isLoading = false)) }
+            val mockTimer = TimerModel(
+                id = 68,
+                title = "Тренировка 7",
+                totalTime = 900,
+                intervals = listOf(
+                    IntervalModel(title = "Ходьба в среднем темпе", time = 7),
+                    IntervalModel(title = "Ходьба в интенсивном темпе", time = 3),
+                    IntervalModel(title = "Ходьба в среднем темпе", time = 1),
+                    IntervalModel(title = "Медленный бег", time = 3),
+                    IntervalModel(title = "Ходьба в среднем темпе", time = 1),
+                    IntervalModel(title = "Ходьба в интенсивном темпе", time = 3),
+                    IntervalModel(title = "Ходьба в среднем темпе", time = 7),
+                    IntervalModel(title = "Медленный бег", time = 3)
+                )
+            )
+            _sideEffect.emit(LoadSideEffect.NavigateToTimer(mockTimer))
+            _state.update { it.copy(btnState = it.btnState.copy(isLoading = false)) }
 
+//            _state.update {
+//                it.copy(btnState = it.btnState.copy(isLoading = true))
+//            }
+//
+//            when (val result = getTimerUseCase(id)) {
+//                is Resource.Success -> {
+//                    _state.update {
+//                        it.copy(
+//                            btnState = it.btnState.copy(isLoading = false),
+//                        )
+//                    }
+//                    _sideEffect.emit(LoadSideEffect.NavigateToTimer(result.data))
+//                }
+//                is Resource.Error -> {
 //                    _state.update {
 //                        it.copy(
 //                            btnState = it.btnState.copy(isLoading = false),
 //                            timerIdInputState = it.timerIdInputState.copy(isError = true)
 //                        )
 //                    }
-                }
-            }
+//                }
+//            }
         }
     }
 }

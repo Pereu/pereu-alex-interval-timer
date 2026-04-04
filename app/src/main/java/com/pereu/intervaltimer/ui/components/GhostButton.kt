@@ -32,7 +32,7 @@ fun GhostButton(
             .fillMaxWidth()
             .height(Size.ghostButtonHeight),
         shape = MaterialTheme.shapes.medium,
-        border = BorderStroke(1.5.dp, state.borderColor),
+        border = BorderStroke(1.dp, state.borderColor.copy(alpha = 0.5f)),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = Surface
         )
