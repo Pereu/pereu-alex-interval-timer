@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,7 +47,7 @@ fun TimerScreen(
         }
     }
     TimerScreenContent(
-        state = state,
+        uiState = state,
         onIntent = viewModel::handleIntent,
         onBack = onBack
     )
@@ -57,7 +55,7 @@ fun TimerScreen(
 
 @Composable
 private fun TimerScreenContent(
-    state: TimerUiState,
+    uiState: TimerUiState,
     onIntent: (TimerIntent) -> Unit,
     onBack: () -> Unit
 ) {
@@ -67,9 +65,7 @@ private fun TimerScreenContent(
             .padding(bottom = Spacing.xl2)
     ) {
         TimerTopBar(
-            title = state.title,
-            status = state.status,
-            elapsedTimeFormatted = state.totalTimeFormatted,
+            state = uiState.topBarState,
             onBack = onBack
         )
 
@@ -81,35 +77,39 @@ private fun TimerScreenContent(
         ) {
             TimerCard(
                 state = TimerCardState(
-                    status = state.status,
-                    intervalTitle = state.intervals.getOrNull(state.currentIntervalIndex)?.title
+                    status = uiState.status,
+                    intervalTitle = uiState.intervals.getOrNull(uiState.currentIntervalIndex)?.title
                         ?: "",
-                    remainingTimeFormatted = state.remainingIntervalTime.toTimeFormatted(),
-                    elapsedTime = state.elapsedTime,
-                    intervalTotalTime = state.intervals.getOrNull(state.currentIntervalIndex)?.time
+                    remainingTimeFormatted = uiState.remainingIntervalTime.toTimeFormatted(),
+                    elapsedTime = uiState.elapsedTime,
+                    intervalTotalTime = uiState.intervals.getOrNull(uiState.currentIntervalIndex)?.time
                         ?: 0,
-                    totalTimeFormatted = state.totalTimeFormatted,
-                    elapsedTimeFormatted = state.elapsedTime.toTimeFormatted()
+                    totalTimeFormatted = uiState.totalTimeFormatted,
+                    elapsedTimeFormatted = uiState.elapsedTime.toTimeFormatted()
                 )
             )
 
             IntervalsList(
-                intervals = state.intervals,
-                currentIndex = state.currentIntervalIndex,
-                timerStatus = state.status
+                intervals = uiState.intervals,
+                currentIndex = uiState.currentIntervalIndex,
+                timerStatus = uiState.status
             )
         }
 
         Spacer(modifier = Modifier.height(Spacing.xl))
 
         TimerBottomButtons(
-            status = state.status,
+            status = uiState.status,
             onIntent = onIntent
         )
     }
 }
 
+private val previewTimerTopBarState =
+    TimerTopBarState(title = "Тренировка 7", elapsedTimeFormatted = "15:00")
+
 private val previewTimerUiState = TimerUiState(
+    topBarState = previewTimerTopBarState,
     title = "Тренировка 7",
     totalTime = 900,
     totalTimeFormatted = "15:00",
@@ -150,7 +150,7 @@ private val previewTimerUiState = TimerUiState(
 private fun TimerScreenIdlePreview() {
     IntervalTimerTheme {
         TimerScreenContent(
-            state = previewTimerUiState,
+            uiState = previewTimerUiState,
             onIntent = {},
             onBack = {}
         )
@@ -162,7 +162,10 @@ private fun TimerScreenIdlePreview() {
 private fun TimerScreenRunningPreview() {
     IntervalTimerTheme {
         TimerScreenContent(
-            state = previewTimerUiState.copy(status = TimerStatus.Running),
+            uiState = previewTimerUiState.copy(
+                status = TimerStatus.Running,
+                topBarState = previewTimerTopBarState.copy(status = TimerStatus.Running)
+            ),
             onIntent = {},
             onBack = {}
         )
@@ -174,7 +177,10 @@ private fun TimerScreenRunningPreview() {
 private fun TimerScreenPausedPreview() {
     IntervalTimerTheme {
         TimerScreenContent(
-            state = previewTimerUiState.copy(status = TimerStatus.Paused),
+            uiState = previewTimerUiState.copy(
+                status = TimerStatus.Paused,
+                topBarState = previewTimerTopBarState.copy(status = TimerStatus.Paused)
+            ),
             onIntent = {},
             onBack = {}
         )
@@ -186,8 +192,9 @@ private fun TimerScreenPausedPreview() {
 private fun TimerScreenCompletedPreview() {
     IntervalTimerTheme {
         TimerScreenContent(
-            state = previewTimerUiState.copy(
+            uiState = previewTimerUiState.copy(
                 status = TimerStatus.Completed,
+                topBarState = previewTimerTopBarState.copy(status = TimerStatus.Completed),
                 intervals = previewTimerUiState.intervals.map {
                     it.copy(status = IntervalStatus.Completed, progress = 1f)
                 }

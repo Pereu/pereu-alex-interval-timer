@@ -1,6 +1,7 @@
 package com.pereu.intervaltimer.ui.timer
 
 import androidx.annotation.StringRes
+import androidx.compose.material3.TopAppBarState
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.pereu.intervaltimer.R
@@ -10,6 +11,7 @@ import com.pereu.intervaltimer.ui.theme.PrimaryLight
 import com.pereu.intervaltimer.ui.theme.Secondary
 import com.pereu.intervaltimer.ui.theme.Surface
 import com.pereu.intervaltimer.ui.theme.TextPrimary
+import com.pereu.intervaltimer.ui.timer.screen.TimerTopBarState
 
 enum class TimerStatus(
     val accentColor: Color,
@@ -40,6 +42,9 @@ enum class TimerStatus(
 
 @Immutable
 data class TimerUiState(
+    val topBarState: TimerTopBarState = TimerTopBarState(),
+
+
     val title: String = "",
     val totalTime: Int = 0,
     val totalTimeFormatted: String = "",

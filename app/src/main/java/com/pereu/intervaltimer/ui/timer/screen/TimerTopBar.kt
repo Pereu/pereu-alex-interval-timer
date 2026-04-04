@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -13,11 +14,16 @@ import com.pereu.intervaltimer.ui.components.BackButton
 import com.pereu.intervaltimer.ui.theme.*
 import com.pereu.intervaltimer.ui.timer.TimerStatus
 
+@Immutable
+data class TimerTopBarState(
+    val title: String = "",
+    val status: TimerStatus = TimerStatus.Idle,
+    val elapsedTimeFormatted: String = ""
+)
+
 @Composable
 fun TimerTopBar(
-    title: String,
-    status: TimerStatus,
-    elapsedTimeFormatted: String,
+    state: TimerTopBarState,
     onBack: () -> Unit
 ) {
     Row(
@@ -30,16 +36,16 @@ fun TimerTopBar(
         BackButton(onClick = onBack)
 
         Text(
-            text = title,
+            text = state.title,
             style = TitleStyle,
             color = TextPrimary,
             modifier = Modifier.weight(1f).padding(horizontal = Spacing.m),
             textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
 
-        when (status) {
+        when (state.status) {
             TimerStatus.Idle -> Text(
-                text = elapsedTimeFormatted,
+                text = state.elapsedTimeFormatted,
                 style = MonoStyle,
                 color = TextSecondary
             )
@@ -52,17 +58,17 @@ fun TimerTopBar(
                         .size(Spacing.s)
                         .background(Primary, shape = androidx.compose.foundation.shape.CircleShape)
                 )
-                Text(text = elapsedTimeFormatted, style = MonoStyle, color = Primary)
+                Text(text = state.elapsedTimeFormatted, style = MonoStyle, color = Primary)
             }
             TimerStatus.Paused -> Text(
                 text = stringResource(R.string.timer_topbar_paused),
                 style = StateStyle,
-                color = status.accentColor
+                color = state.status.accentColor
             )
             TimerStatus.Completed -> Text(
                 text = stringResource(R.string.timer_topbar_completed),
                 style = StateStyle,
-                color = status.accentColor
+                color = state.status.accentColor
             )
         }
     }
@@ -73,9 +79,11 @@ fun TimerTopBar(
 private fun TimerTopBarRunningPreview() {
     IntervalTimerTheme {
         TimerTopBar(
-            title = "Тренировка 7",
-            status = TimerStatus.Running,
-            elapsedTimeFormatted = "12:18",
+            state = TimerTopBarState(
+                title = "Тренировка 7",
+                status = TimerStatus.Running,
+                elapsedTimeFormatted = "12:18",
+            ),
             onBack = {}
         )
     }
@@ -86,9 +94,11 @@ private fun TimerTopBarRunningPreview() {
 private fun TimerTopBarPausedPreview() {
     IntervalTimerTheme {
         TimerTopBar(
-            title = "Тренировка 7",
-            status = TimerStatus.Paused,
-            elapsedTimeFormatted = "12:18",
+            state = TimerTopBarState(
+                title = "Тренировка 7",
+                status = TimerStatus.Paused,
+                elapsedTimeFormatted = "12:18",
+            ),
             onBack = {}
         )
     }
@@ -99,9 +109,11 @@ private fun TimerTopBarPausedPreview() {
 private fun TimerTopBarCompletedPreview() {
     IntervalTimerTheme {
         TimerTopBar(
-            title = "Тренировка 7",
-            status = TimerStatus.Completed,
-            elapsedTimeFormatted = "15:00",
+            state = TimerTopBarState(
+                title = "Тренировка 7",
+                status = TimerStatus.Completed,
+                elapsedTimeFormatted = "15:00",
+            ),
             onBack = {}
         )
     }

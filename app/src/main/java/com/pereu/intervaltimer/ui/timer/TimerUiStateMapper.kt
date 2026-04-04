@@ -1,10 +1,17 @@
 package com.pereu.intervaltimer.ui.timer
 
 import com.pereu.intervaltimer.domain.model.TimerModel
+import com.pereu.intervaltimer.ui.timer.screen.TimerTopBarState
 import javax.inject.Inject
 
 class TimerUiStateMapper @Inject constructor() {
+
     fun toInitialUiState(timer: TimerModel): TimerUiState = TimerUiState(
+        topBarState = TimerTopBarState(
+            title = timer.title,
+            elapsedTimeFormatted = timer.totalTime.toTimeFormatted()
+        ),
+
         title = timer.title,
         totalTime = timer.totalTime,
         totalTimeFormatted = timer.totalTime.toTimeFormatted(),
