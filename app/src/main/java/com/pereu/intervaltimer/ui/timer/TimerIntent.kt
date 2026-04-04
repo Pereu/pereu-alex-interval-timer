@@ -5,4 +5,5 @@ sealed interface TimerIntent {
     object Pause : TimerIntent
     object Resume : TimerIntent
     object Reset : TimerIntent
+    object NewWorkout : TimerIntent
 }

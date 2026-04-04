@@ -35,6 +35,7 @@ class TimerViewModel @Inject constructor(
             is TimerIntent.Pause -> pause()
             is TimerIntent.Resume -> start()
             is TimerIntent.Reset -> reset()
+            is TimerIntent.NewWorkout -> TODO()
         }
     }
 

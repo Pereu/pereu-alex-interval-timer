@@ -23,8 +23,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pereu.intervaltimer.R
 import com.pereu.intervaltimer.domain.model.TimerModel
-import com.pereu.intervaltimer.ui.components.LoadButton
-import com.pereu.intervaltimer.ui.components.LoadButtonState
+import com.pereu.intervaltimer.ui.components.PrimaryButton
+import com.pereu.intervaltimer.ui.components.PrimaryButtonState
 import com.pereu.intervaltimer.ui.components.OutLinedTextField
 import com.pereu.intervaltimer.ui.components.OutlinedTextFieldState
 import com.pereu.intervaltimer.ui.theme.BodyStyle
@@ -109,7 +109,7 @@ private fun LoadScreenContent(
 
         Spacer(modifier = Modifier.height(Spacing.l))
 
-        LoadButton(
+        PrimaryButton(
             state = state.btnState,
             onClick = { onIntent(LoadIntent.LoadClicked) }
         )
@@ -133,7 +133,7 @@ private fun LoadScreenLoadingPreview() {
     IntervalTimerTheme {
         LoadScreenContent(
             state = LoadUiState(
-                btnState = LoadButtonState(
+                btnState = PrimaryButtonState(
                     titleRes = R.string.load_button_loading,
                     isLoading = true
                 )
@@ -149,7 +149,7 @@ private fun LoadScreenErrorPreview() {
     IntervalTimerTheme {
         LoadScreenContent(
             state = LoadUiState(
-                btnState = LoadButtonState(titleRes = R.string.load_button_retry),
+                btnState = PrimaryButtonState(titleRes = R.string.load_button_retry),
                 timerIdInputState = OutlinedTextFieldState(
                     value = "68",
                     isError = true,

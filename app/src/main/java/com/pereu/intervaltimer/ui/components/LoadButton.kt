@@ -13,15 +13,15 @@ import com.pereu.intervaltimer.R
 import com.pereu.intervaltimer.ui.theme.*
 
 @Immutable
-data class LoadButtonState(
+data class PrimaryButtonState(
     @get:StringRes val titleRes: Int = R.string.empty,
     val enabled: Boolean = true,
     val isLoading: Boolean = false
 )
 
 @Composable
-fun LoadButton(
-    state: LoadButtonState,
+fun PrimaryButton(
+    state: PrimaryButtonState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -53,22 +53,22 @@ fun LoadButton(
 
 @Preview(showBackground = true)
 @Composable
-private fun LoadButtonPreview() {
+private fun PrimaryButtonPreview() {
     IntervalTimerTheme {
         Column(
             modifier = Modifier.padding(Spacing.l),
             verticalArrangement = Arrangement.spacedBy(Spacing.s)
         ) {
-            LoadButton(
-                state = LoadButtonState(titleRes = R.string.load_button_load),
+            PrimaryButton(
+                state = PrimaryButtonState(titleRes = R.string.load_button_load),
                 onClick = {})
-            LoadButton(
-                state = LoadButtonState(
+            PrimaryButton(
+                state = PrimaryButtonState(
                     titleRes = R.string.load_button_loading,
                     isLoading = true
                 ), onClick = {})
-            LoadButton(
-                state = LoadButtonState(
+            PrimaryButton(
+                state = PrimaryButtonState(
                     titleRes = R.string.load_button_retry,
                     enabled = false
                 ), onClick = {})
