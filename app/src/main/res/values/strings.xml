@@ -1,11 +1,17 @@
 <resources>
     <string name="app_name">Interval Timer</string>
     <string name="load_button_load">Загрузить</string>
-    <string name="load_button_loading">Загрузка...</string>
+    <string name="load_button_loading">Загрузка…</string>
     <string name="load_button_retry">Повторить</string>
     <string name="label_timer_id">ID тренировки</string>
     <string name="error_timer_not_found">Тренировка не найдена. Проверьте ID.</string>
     <string name="app_title">Интервальный\nтаймер</string>
     <string name="app_subtitle">Введите ID тренировки для загрузки программы интервалов</string>
+    <string name="timer_status_ready">ГОТОВО К СТАРТУ</string>
+    <string name="timer_status_running">ВЫПОЛНЯЕТСЯ</string>
+    <string name="timer_status_paused">НА ПАУЗЕ</string>
+    <string name="timer_status_completed">ТРЕНИРОВКА ЗАВЕРШЕНА</string>
+    <string name="timer_topbar_paused">Пауза</string>
+    <string name="timer_topbar_completed">Завершена</string>
     <string name="empty" />
 </resources>
