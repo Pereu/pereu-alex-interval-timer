@@ -3,8 +3,8 @@ package com.pereu.intervaltimer.ui.timer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pereu.intervaltimer.domain.model.TimerModel
-import com.pereu.intervaltimer.ui.SharedViewModel
 import com.pereu.intervaltimer.util.SoundManager
+import com.pereu.intervaltimer.util.TTSManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TimerViewModel @Inject constructor(
     private val mapper: TimerUiStateMapper,
-    private val soundManager: SoundManager
+    private val soundManager: SoundManager,
+    private val ttsManager: TTSManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TimerUiState())
@@ -34,6 +35,7 @@ class TimerViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         soundManager.release()
+        ttsManager.release()
     }
 
     fun init(timer: TimerModel) {
@@ -72,7 +74,11 @@ class TimerViewModel @Inject constructor(
             )
         }
 
-        if (isFirstStart) soundManager.playStart()
+        if (isFirstStart) {
+            soundManager.playStart()
+            val firstInterval = _state.value.intervals.firstOrNull()?.title.orEmpty()
+            ttsManager.speak("Начинаем. $firstInterval")
+        }
 
         timerJob = viewModelScope.launch {
             while (true) {
@@ -146,6 +152,8 @@ class TimerViewModel @Inject constructor(
                 soundManager.playFinish()
             }
 
+            ttsManager.speak("Тренировка завершена. Отличная работа!")
+
             timerJob?.cancel()
             _state.update {
                 it.copy(
@@ -169,6 +177,9 @@ class TimerViewModel @Inject constructor(
         }
 
         soundManager.playIntervalChange()
+
+        val nextTitle = current.intervals[nextIndex].title
+        ttsManager.speak(nextTitle)
 
         _state.update {
             it.copy(
