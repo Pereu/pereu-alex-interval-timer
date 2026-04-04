@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pereu.intervaltimer.domain.model.TimerModel
 import com.pereu.intervaltimer.ui.SharedViewModel
+import com.pereu.intervaltimer.util.SoundManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimerViewModel @Inject constructor(
-    private val mapper: TimerUiStateMapper
+    private val mapper: TimerUiStateMapper,
+    private val soundManager: SoundManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TimerUiState())
@@ -28,6 +30,11 @@ class TimerViewModel @Inject constructor(
 
     private var timerJob: Job? = null
     private var timer: TimerModel? = null
+
+    override fun onCleared() {
+        super.onCleared()
+        soundManager.release()
+    }
 
     fun init(timer: TimerModel) {
         if (this.timer == null) {
@@ -54,6 +61,9 @@ class TimerViewModel @Inject constructor(
 
     private fun start() {
         timerJob?.cancel()
+
+        val isFirstStart = _state.value.status == TimerStatus.Idle
+
         _state.update {
             it.copy(
                 status = TimerStatus.Running,
@@ -61,6 +71,9 @@ class TimerViewModel @Inject constructor(
                 timerCardState = it.timerCardState.copy(status = TimerStatus.Running)
             )
         }
+
+        if (isFirstStart) soundManager.playStart()
+
         timerJob = viewModelScope.launch {
             while (true) {
                 delay(1000)
@@ -127,6 +140,8 @@ class TimerViewModel @Inject constructor(
         val nextIndex = current.currentIntervalIndex + 1
 
         if (nextIndex >= current.intervals.size) {
+            soundManager.playFinish()
+
             timerJob?.cancel()
             _state.update {
                 it.copy(
@@ -148,6 +163,8 @@ class TimerViewModel @Inject constructor(
             }
             return
         }
+
+        soundManager.playIntervalChange()
 
         _state.update {
             it.copy(

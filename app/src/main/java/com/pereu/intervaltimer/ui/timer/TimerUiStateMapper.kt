@@ -17,7 +17,7 @@ class TimerUiStateMapper @Inject constructor() {
             )
         }
 
-        val totalTime = timer.totalTime
+        val totalTime = intervals.sumOf { it.time }
 
         return TimerUiState(
             remainingIntervalTime = timer.intervals.first().time,
