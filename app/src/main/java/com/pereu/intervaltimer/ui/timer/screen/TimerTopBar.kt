@@ -57,12 +57,12 @@ fun TimerTopBar(
             TimerStatus.Paused -> Text(
                 text = stringResource(R.string.timer_topbar_paused),
                 style = StateStyle,
-                color = Orange
+                color = status.accentColor
             )
             TimerStatus.Completed -> Text(
                 text = stringResource(R.string.timer_topbar_completed),
                 style = StateStyle,
-                color = Secondary
+                color = status.accentColor
             )
         }
     }
