@@ -18,6 +18,10 @@ class TimerUiStateMapper @Inject constructor() {
         }
 
         return TimerUiState(
+            totalTime = timer.totalTime,
+            remainingIntervalTime = timer.intervals.first().time,
+            currentIntervalIndex = 0,
+            intervals = intervals,
             topBarState = TimerTopBarState(
                 title = timer.title,
                 elapsedTimeFormatted = timer.totalTime.toTimeFormatted()

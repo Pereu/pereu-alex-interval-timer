@@ -23,11 +23,12 @@ data class TimerTopBarState(
 
 @Composable
 fun TimerTopBar(
+    modifier: Modifier = Modifier,
     state: TimerTopBarState,
     onBack: () -> Unit
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = Spacing.xl2, vertical = Spacing.l),
         verticalAlignment = Alignment.CenterVertically

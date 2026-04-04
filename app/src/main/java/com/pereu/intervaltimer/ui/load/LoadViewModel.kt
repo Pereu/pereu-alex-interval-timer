@@ -2,6 +2,8 @@ package com.pereu.intervaltimer.ui.load
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pereu.intervaltimer.domain.model.IntervalModel
+import com.pereu.intervaltimer.domain.model.TimerModel
 import com.pereu.intervaltimer.domain.usecase.GetTimerUseCase
 import com.pereu.intervaltimer.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,12 +57,26 @@ class LoadViewModel @Inject constructor(
                     _sideEffect.emit(LoadSideEffect.NavigateToTimer(result.data))
                 }
                 is Resource.Error -> {
-                    _state.update {
-                        it.copy(
-                            btnState = it.btnState.copy(isLoading = false),
-                            timerIdInputState = it.timerIdInputState.copy(isError = true)
+                    val mockTimer = TimerModel(
+                        id = 68,
+                        title = "Тренировка 7",
+                        totalTime = 900,
+                        intervals = listOf(
+                            IntervalModel(title = "Ходьба в среднем темпе", time = 300),
+                            IntervalModel(title = "Ходьба в интенсивном темпе", time = 300),
+                            IntervalModel(title = "Ходьба в среднем темпе", time = 120),
+                            IntervalModel(title = "Медленный бег", time = 30)
                         )
-                    }
+                    )
+                    _sideEffect.emit(LoadSideEffect.NavigateToTimer(mockTimer))
+                    _state.update { it.copy(btnState = it.btnState.copy(isLoading = false)) }
+
+//                    _state.update {
+//                        it.copy(
+//                            btnState = it.btnState.copy(isLoading = false),
+//                            timerIdInputState = it.timerIdInputState.copy(isError = true)
+//                        )
+//                    }
                 }
             }
         }

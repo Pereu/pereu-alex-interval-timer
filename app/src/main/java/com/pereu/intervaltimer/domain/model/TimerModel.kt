@@ -4,10 +4,10 @@ data class TimerModel(
     val id: Int,
     val title: String,
     val totalTime: Int,
-    val intervals: List<Interval>
+    val intervals: List<IntervalModel>
 )
 
-data class Interval(
+data class IntervalModel(
     val title: String,
     val time: Int
 )

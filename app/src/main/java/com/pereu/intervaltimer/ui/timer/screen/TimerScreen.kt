@@ -3,9 +3,13 @@ package com.pereu.intervaltimer.ui.timer.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,7 +27,6 @@ import com.pereu.intervaltimer.ui.timer.TimerSideEffect
 import com.pereu.intervaltimer.ui.timer.TimerStatus
 import com.pereu.intervaltimer.ui.timer.TimerUiState
 import com.pereu.intervaltimer.ui.timer.TimerViewModel
-import com.pereu.intervaltimer.ui.timer.toTimeFormatted
 
 @Composable
 fun TimerScreen(
@@ -63,9 +66,11 @@ private fun TimerScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = Spacing.xl2)
+            .windowInsetsPadding(WindowInsets.navigationBars)
     ) {
         TimerTopBar(
             state = uiState.topBarState,
+            modifier = Modifier.statusBarsPadding(),
             onBack = onBack
         )
 
@@ -104,7 +109,8 @@ private val previewTimerCardState = TimerCardState(
     elapsedTime = 0,
     intervalTotalTime = 300,
     totalTimeFormatted = "15:00",
-    elapsedTimeFormatted = "0:00"
+    elapsedTimeFormatted = "0:00",
+    progress = 0f
 )
 
 private val previewTimerUiState = TimerUiState(
@@ -169,7 +175,8 @@ private fun TimerScreenRunningPreview() {
                     remainingTimeFormatted = "0:18",
                     elapsedTime = 12,
                     intervalTotalTime = 30,
-                    elapsedTimeFormatted = "12:18"
+                    elapsedTimeFormatted = "12:18",
+                    progress = 0.4f
                 )
             ),
             onIntent = {},
@@ -192,7 +199,8 @@ private fun TimerScreenPausedPreview() {
                     remainingTimeFormatted = "0:18",
                     elapsedTime = 12,
                     intervalTotalTime = 30,
-                    elapsedTimeFormatted = "12:18"
+                    elapsedTimeFormatted = "12:18",
+                    progress = 0.4f
                 )
             ),
             onIntent = {},
@@ -214,7 +222,8 @@ private fun TimerScreenCompletedPreview() {
                     remainingTimeFormatted = "0:00",
                     elapsedTime = 900,
                     intervalTotalTime = 300,
-                    elapsedTimeFormatted = "15:00"
+                    elapsedTimeFormatted = "15:00",
+                    progress = 1f
                 ),
                 intervals = previewTimerUiState.intervals.map {
                     it.copy(status = IntervalStatus.Completed, progress = 1f)
