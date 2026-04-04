@@ -21,5 +21,7 @@
     <string name="timer_btn_reset">Сбросить тренировку</string>
     <string name="timer_btn_restart">↺ Запустить заново</string>
     <string name="timer_btn_new">Новая тренировка</string>
+    <string name="timer_status_completed_subtitle">Отличная работа!</string>
+    <string name="timer_total_time_label">Общее время</string>
     <string name="empty" />
 </resources>

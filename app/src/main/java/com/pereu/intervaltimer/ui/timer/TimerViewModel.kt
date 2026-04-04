@@ -27,9 +27,13 @@ class TimerViewModel @Inject constructor(
     val sideEffect = _sideEffect.asSharedFlow()
 
     private var timerJob: Job? = null
+    private var timer: TimerModel? = null
 
     fun init(timer: TimerModel) {
-        _state.update { mapper.toInitialUiState(timer) }
+        if (this.timer == null) {
+            this.timer = timer
+            _state.update { mapper.toInitialUiState(timer) }
+        }
     }
 
     fun handleIntent(intent: TimerIntent) {
@@ -50,7 +54,13 @@ class TimerViewModel @Inject constructor(
 
     private fun start() {
         timerJob?.cancel()
-        _state.update { it.copy(status = TimerStatus.Running) }
+        _state.update {
+            it.copy(
+                status = TimerStatus.Running,
+                topBarState = it.topBarState.copy(status = TimerStatus.Running),
+                timerCardState = it.timerCardState.copy(status = TimerStatus.Running)
+            )
+        }
         timerJob = viewModelScope.launch {
             while (true) {
                 delay(1000)
@@ -61,14 +71,21 @@ class TimerViewModel @Inject constructor(
 
     private fun pause() {
         timerJob?.cancel()
-        _state.update { it.copy(status = TimerStatus.Paused) }
+        _state.update {
+            it.copy(
+                status = TimerStatus.Paused,
+                topBarState = it.topBarState.copy(status = TimerStatus.Paused),
+                timerCardState = it.timerCardState.copy(status = TimerStatus.Paused)
+            )
+        }
     }
 
     private fun reset() {
         timerJob?.cancel()
-//        sharedViewModel.timer.value?.let { timer ->
-//            _state.update { mapper.toInitialUiState(timer) }
-//        }
+        val timer = timer ?: return
+        _state.update {
+            mapper.toInitialUiState(timer)
+        }
     }
 
     private fun tick() {
@@ -79,10 +96,20 @@ class TimerViewModel @Inject constructor(
         if (newRemaining <= 0) {
             moveToNextInterval(newElapsed)
         } else {
+            val newProgress =
+                1f - (newRemaining.toFloat() / (current.intervals.getOrNull(current.currentIntervalIndex)?.time
+                    ?: 1))
+
             _state.update {
                 it.copy(
                     remainingIntervalTime = newRemaining,
                     elapsedTime = newElapsed,
+                    timerCardState = it.timerCardState.copy(
+                        remainingTimeFormatted = newRemaining.toTimeFormatted(),
+                        elapsedTimeFormatted = newElapsed.toTimeFormatted(),
+                        elapsedTime = newElapsed,
+                        progress = newProgress
+                    ),
                     intervals = it.intervals.mapIndexed { index, interval ->
                         if (index == it.currentIntervalIndex) {
                             interval.copy(
@@ -104,10 +131,18 @@ class TimerViewModel @Inject constructor(
             _state.update {
                 it.copy(
                     status = TimerStatus.Completed,
+                    topBarState = it.topBarState.copy(status = TimerStatus.Completed),
+                    timerCardState = it.timerCardState.copy(
+                        status = TimerStatus.Completed,
+                        remainingTimeFormatted = "0:00",
+                        elapsedTimeFormatted = elapsedTime.toTimeFormatted(),
+                        elapsedTime = elapsedTime,
+                        progress = 1f
+                    ),
                     elapsedTime = elapsedTime,
                     remainingIntervalTime = 0,
                     intervals = it.intervals.map { interval ->
-                        interval.copy(status = IntervalStatus.Completed)
+                        interval.copy(status = IntervalStatus.Completed, progress = 1f)
                     }
                 )
             }
@@ -119,6 +154,14 @@ class TimerViewModel @Inject constructor(
                 elapsedTime = elapsedTime,
                 currentIntervalIndex = nextIndex,
                 remainingIntervalTime = it.intervals[nextIndex].time,
+                timerCardState = it.timerCardState.copy(
+                    status = TimerStatus.Running,
+                    intervalTitle = it.intervals[nextIndex].title,
+                    remainingTimeFormatted = it.intervals[nextIndex].time.toTimeFormatted(),
+                    elapsedTimeFormatted = elapsedTime.toTimeFormatted(),
+                    elapsedTime = elapsedTime,
+                    progress = 0f
+                ),
                 intervals = it.intervals.mapIndexed { index, interval ->
                     interval.copy(
                         status = when {
@@ -128,7 +171,6 @@ class TimerViewModel @Inject constructor(
                         },
                         progress = when {
                             index < nextIndex -> 1f
-                            index == nextIndex -> 0f
                             else -> 0f
                         }
                     )

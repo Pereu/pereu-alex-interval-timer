@@ -11,12 +11,14 @@ import com.pereu.intervaltimer.ui.theme.PrimaryLight
 import com.pereu.intervaltimer.ui.theme.Secondary
 import com.pereu.intervaltimer.ui.theme.Surface
 import com.pereu.intervaltimer.ui.theme.TextPrimary
+import com.pereu.intervaltimer.ui.timer.screen.TimerCardState
 import com.pereu.intervaltimer.ui.timer.screen.TimerTopBarState
 
 enum class TimerStatus(
     val accentColor: Color,
     val bgColor: Color,
-    @get:StringRes val statusRes: Int
+    @get:StringRes val statusRes: Int,
+    @param:StringRes val subtitleRes: Int? = null
 ) {
     Idle(
         accentColor = TextPrimary,
@@ -36,23 +38,21 @@ enum class TimerStatus(
     Completed(
         accentColor = Secondary,
         bgColor = Color(0x143B82F6),
-        statusRes = R.string.timer_status_completed
+        statusRes = R.string.timer_status_completed,
+        subtitleRes = R.string.timer_status_completed_subtitle
     )
 }
 
 @Immutable
 data class TimerUiState(
     val topBarState: TimerTopBarState = TimerTopBarState(),
-
-
-    val title: String = "",
-    val totalTime: Int = 0,
-    val totalTimeFormatted: String = "",
-    val elapsedTime: Int = 0,
-    val status: TimerStatus = TimerStatus.Idle,
+    val timerCardState: TimerCardState = TimerCardState(),
     val intervals: List<IntervalUiState> = emptyList(),
     val currentIntervalIndex: Int = 0,
-    val remainingIntervalTime: Int = 0
+    val remainingIntervalTime: Int = 0,
+    val totalTime: Int = 0,
+    val elapsedTime: Int = 0,
+    val status: TimerStatus = TimerStatus.Idle
 )
 
 @Immutable

@@ -22,20 +22,26 @@ import com.pereu.intervaltimer.ui.timer.TimerStatus
 
 @Immutable
 data class TimerCardState(
-    val status: TimerStatus,
-    val intervalTitle: String,
-    val remainingTimeFormatted: String,
-    val elapsedTime: Int,
-    val intervalTotalTime: Int,
-    val totalTimeFormatted: String,
-    val elapsedTimeFormatted: String
+    val status: TimerStatus = TimerStatus.Idle,
+    val intervalTitle: String = "",
+    val remainingTimeFormatted: String = "0:00",
+    val elapsedTime: Int = 0,
+    val intervalTotalTime: Int = 0,
+    val totalTimeFormatted: String = "0:00",
+    val elapsedTimeFormatted: String = "0:00",
+    val progress: Float = 0f
 )
 
 @Composable
 fun TimerCard(state: TimerCardState) {
-    val progress = if (state.intervalTotalTime > 0) {
-        (state.intervalTotalTime - state.elapsedTime).toFloat() / state.intervalTotalTime
-    } else 0f
+
+//    val progress = when (state.status) {
+//        TimerStatus.Idle -> 0f
+//        TimerStatus.Completed -> 1f
+//        else -> if (state.intervalTotalTime > 0)
+//            (state.intervalTotalTime - state.elapsedTime).toFloat() / state.intervalTotalTime
+//        else 0f
+//    }
 
     Box(
         modifier = Modifier
@@ -47,7 +53,11 @@ fun TimerCard(state: TimerCardState) {
                 ),
                 shape = RoundedCornerShape(Radius.timerCard)
             )
-            .border(1.5.dp, state.status.accentColor.copy(alpha = 0.3f), RoundedCornerShape(Radius.timerCard))
+            .border(
+                1.5.dp,
+                state.status.accentColor.copy(alpha = 0.3f),
+                RoundedCornerShape(Radius.timerCard)
+            )
             .padding(Spacing.xl2)
     ) {
         Column(
@@ -63,10 +73,12 @@ fun TimerCard(state: TimerCardState) {
             Spacer(modifier = Modifier.height(Spacing.xs))
 
             Text(
-                text = state.intervalTitle,
+                text = if (state.status.subtitleRes != null)
+                    stringResource(state.status.subtitleRes)
+                else
+                    state.intervalTitle,
                 style = BodyStyle,
-                color = TextPrimary,
-                textAlign = TextAlign.Center
+                color = state.status.accentColor
             )
 
             Spacer(modifier = Modifier.height(Spacing.l))
@@ -93,7 +105,7 @@ fun TimerCard(state: TimerCardState) {
             Spacer(modifier = Modifier.height(Spacing.m))
 
             LinearProgressIndicator(
-                progress = { progress },
+                progress = { state.progress },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(4.dp)
@@ -105,34 +117,37 @@ fun TimerCard(state: TimerCardState) {
     }
 }
 
-private val baseCardState  = TimerCardState(
+private val baseCardState = TimerCardState(
     status = TimerStatus.Idle,
     intervalTitle = "Ходьба в среднем темпе",
     remainingTimeFormatted = "15:00",
     elapsedTime = 0,
     intervalTotalTime = 300,
     totalTimeFormatted = "15:00",
-    elapsedTimeFormatted = "0:00"
+    elapsedTimeFormatted = "0:00",
+    progress = 0f
 )
 
 @Preview(showBackground = true, name = "Idle")
 @Composable
 private fun TimerCardIdlePreview() {
-    IntervalTimerTheme { TimerCard(state = baseCardState ) }
+    IntervalTimerTheme { TimerCard(state = baseCardState) }
 }
 
 @Preview(showBackground = true, name = "Running")
 @Composable
 private fun TimerCardRunningPreview() {
     IntervalTimerTheme {
-        TimerCard(state = baseCardState.copy(
-            status = TimerStatus.Running,
-            intervalTitle = "Медленный бег",
-            remainingTimeFormatted = "0:18",
-            elapsedTime = 12,
-            intervalTotalTime = 30,
-            elapsedTimeFormatted = "12:18"
-        ))
+        TimerCard(
+            state = baseCardState.copy(
+                status = TimerStatus.Running,
+                remainingTimeFormatted = "0:18",
+                elapsedTime = 12,
+                intervalTotalTime = 30,
+                elapsedTimeFormatted = "12:18",
+                progress = 0.4f
+            )
+        )
     }
 }
 
@@ -140,13 +155,31 @@ private fun TimerCardRunningPreview() {
 @Composable
 private fun TimerCardPausedPreview() {
     IntervalTimerTheme {
-        TimerCard(state = baseCardState.copy(
-            status = TimerStatus.Paused,
-            intervalTitle = "Медленный бег",
-            remainingTimeFormatted = "0:18",
-            elapsedTime = 12,
-            intervalTotalTime = 30,
-            elapsedTimeFormatted = "12:18"
-        ))
+        TimerCard(
+            state = baseCardState.copy(
+                status = TimerStatus.Paused,
+                remainingTimeFormatted = "0:18",
+                elapsedTime = 12,
+                intervalTotalTime = 30,
+                elapsedTimeFormatted = "12:18",
+                progress = 0.4f
+            )
+        )
+    }
+}
+@Preview(showBackground = true, name = "Completed")
+@Composable
+private fun TimerCardCompletedPreview() {
+    IntervalTimerTheme {
+        TimerCard(
+            state = baseCardState.copy(
+                status = TimerStatus.Completed,
+                remainingTimeFormatted = "0:00",
+                elapsedTime = 900,
+                intervalTotalTime = 300,
+                elapsedTimeFormatted = "15:00",
+                progress = 1f
+            )
+        )
     }
 }

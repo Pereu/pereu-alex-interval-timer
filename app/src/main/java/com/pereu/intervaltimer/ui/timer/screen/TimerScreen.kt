@@ -76,17 +76,7 @@ private fun TimerScreenContent(
             verticalArrangement = Arrangement.spacedBy(Spacing.xl)
         ) {
             TimerCard(
-                state = TimerCardState(
-                    status = uiState.status,
-                    intervalTitle = uiState.intervals.getOrNull(uiState.currentIntervalIndex)?.title
-                        ?: "",
-                    remainingTimeFormatted = uiState.remainingIntervalTime.toTimeFormatted(),
-                    elapsedTime = uiState.elapsedTime,
-                    intervalTotalTime = uiState.intervals.getOrNull(uiState.currentIntervalIndex)?.time
-                        ?: 0,
-                    totalTimeFormatted = uiState.totalTimeFormatted,
-                    elapsedTimeFormatted = uiState.elapsedTime.toTimeFormatted()
-                )
+                state = uiState.timerCardState
             )
 
             IntervalsList(
@@ -108,11 +98,19 @@ private fun TimerScreenContent(
 private val previewTimerTopBarState =
     TimerTopBarState(title = "Тренировка 7", elapsedTimeFormatted = "15:00")
 
+private val previewTimerCardState = TimerCardState(
+    intervalTitle = "Ходьба в среднем темпе",
+    remainingTimeFormatted = "15:00",
+    elapsedTime = 0,
+    intervalTotalTime = 300,
+    totalTimeFormatted = "15:00",
+    elapsedTimeFormatted = "0:00"
+)
+
 private val previewTimerUiState = TimerUiState(
     topBarState = previewTimerTopBarState,
-    title = "Тренировка 7",
+    timerCardState = previewTimerCardState,
     totalTime = 900,
-    totalTimeFormatted = "15:00",
     elapsedTime = 0,
     status = TimerStatus.Idle,
     currentIntervalIndex = 0,
@@ -164,7 +162,15 @@ private fun TimerScreenRunningPreview() {
         TimerScreenContent(
             uiState = previewTimerUiState.copy(
                 status = TimerStatus.Running,
-                topBarState = previewTimerTopBarState.copy(status = TimerStatus.Running)
+                topBarState = previewTimerTopBarState.copy(status = TimerStatus.Running),
+                timerCardState = previewTimerCardState.copy(
+                    status = TimerStatus.Running,
+                    intervalTitle = "Медленный бег",
+                    remainingTimeFormatted = "0:18",
+                    elapsedTime = 12,
+                    intervalTotalTime = 30,
+                    elapsedTimeFormatted = "12:18"
+                )
             ),
             onIntent = {},
             onBack = {}
@@ -179,7 +185,15 @@ private fun TimerScreenPausedPreview() {
         TimerScreenContent(
             uiState = previewTimerUiState.copy(
                 status = TimerStatus.Paused,
-                topBarState = previewTimerTopBarState.copy(status = TimerStatus.Paused)
+                topBarState = previewTimerTopBarState.copy(status = TimerStatus.Paused),
+                timerCardState = previewTimerCardState.copy(
+                    status = TimerStatus.Paused,
+                    intervalTitle = "Медленный бег",
+                    remainingTimeFormatted = "0:18",
+                    elapsedTime = 12,
+                    intervalTotalTime = 30,
+                    elapsedTimeFormatted = "12:18"
+                )
             ),
             onIntent = {},
             onBack = {}
@@ -195,6 +209,13 @@ private fun TimerScreenCompletedPreview() {
             uiState = previewTimerUiState.copy(
                 status = TimerStatus.Completed,
                 topBarState = previewTimerTopBarState.copy(status = TimerStatus.Completed),
+                timerCardState = previewTimerCardState.copy(
+                    status = TimerStatus.Completed,
+                    remainingTimeFormatted = "0:00",
+                    elapsedTime = 900,
+                    intervalTotalTime = 300,
+                    elapsedTimeFormatted = "15:00"
+                ),
                 intervals = previewTimerUiState.intervals.map {
                     it.copy(status = IntervalStatus.Completed, progress = 1f)
                 }
