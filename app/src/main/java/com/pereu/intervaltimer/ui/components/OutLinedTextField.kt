@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -18,6 +19,7 @@ import com.pereu.intervaltimer.R
 import com.pereu.intervaltimer.ui.theme.CaptionStyle
 import com.pereu.intervaltimer.ui.theme.Error
 import com.pereu.intervaltimer.ui.theme.Primary
+import com.pereu.intervaltimer.ui.theme.Size
 import com.pereu.intervaltimer.ui.theme.Spacing
 import com.pereu.intervaltimer.ui.theme.TextSecondary
 
@@ -46,7 +48,7 @@ fun OutLinedTextField(
         OutlinedTextField(
             value = state.value,
             onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(Size.inputHeight),
             isError = state.isError,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             shape = MaterialTheme.shapes.medium,

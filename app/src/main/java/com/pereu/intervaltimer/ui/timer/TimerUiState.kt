@@ -1,7 +1,6 @@
 package com.pereu.intervaltimer.ui.timer
 
 import androidx.annotation.StringRes
-import androidx.compose.material3.TopAppBarState
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.pereu.intervaltimer.R

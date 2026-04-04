@@ -24,7 +24,5 @@ object Radius {
     val button = 12.dp
     val timerCard = 16.dp
     val intervalItem = 12.dp
-    val backButton = 100.dp
-    val badge = 100.dp
     val progressBar = 2.dp
 }

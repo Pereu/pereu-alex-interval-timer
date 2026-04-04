@@ -16,7 +16,7 @@ class TTSManager @Inject constructor(
     init {
         tts = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                tts?.language = Locale("ru")
+                tts?.language = Locale.getDefault()
                 isReady = true
             }
         }

@@ -57,14 +57,12 @@ class LoadViewModel @Inject constructor(
                     _sideEffect.emit(LoadSideEffect.NavigateToTimer(result.data))
                 }
                 is Resource.Error -> {
-                    _sideEffect.emit(LoadSideEffect.NavigateToTimer(TimerModel.getMockData()))
-                    _state.update { it.copy(btnState = it.btnState.copy(isLoading = false)) }
-//                    _state.update {
-//                        it.copy(
-//                            btnState = it.btnState.copy(isLoading = false),
-//                            timerIdInputState = it.timerIdInputState.copy(isError = true)
-//                        )
-//                    }
+                    _state.update {
+                        it.copy(
+                            btnState = it.btnState.copy(isLoading = false),
+                            timerIdInputState = it.timerIdInputState.copy(isError = true)
+                        )
+                    }
                 }
             }
         }
