@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pereu.intervaltimer.domain.model.TimerModel
 import com.pereu.intervaltimer.util.SoundManager
 import com.pereu.intervaltimer.util.TTSManager
+import com.pereu.intervaltimer.util.WakeLockManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimerViewModel @Inject constructor(
+    private val wakeLockManager: WakeLockManager,
     private val mapper: TimerUiStateMapper,
     private val soundManager: SoundManager,
     private val ttsManager: TTSManager
@@ -34,6 +36,7 @@ class TimerViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
+        wakeLockManager.release()
         soundManager.release()
         ttsManager.release()
     }
@@ -63,7 +66,7 @@ class TimerViewModel @Inject constructor(
 
     private fun start() {
         timerJob?.cancel()
-
+        wakeLockManager.acquire()
         val isFirstStart = _state.value.status == TimerStatus.Idle
 
         _state.update {
@@ -90,6 +93,7 @@ class TimerViewModel @Inject constructor(
 
     private fun pause() {
         timerJob?.cancel()
+        wakeLockManager.release()
         _state.update {
             it.copy(
                 status = TimerStatus.Paused,
@@ -101,6 +105,7 @@ class TimerViewModel @Inject constructor(
 
     private fun reset() {
         timerJob?.cancel()
+        wakeLockManager.release()
         val timer = timer ?: return
         _state.update {
             mapper.toInitialUiState(timer)

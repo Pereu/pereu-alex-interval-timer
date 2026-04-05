@@ -19,6 +19,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    applicationVariants.all {
+        outputs.all {
+            this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            outputFileName = "pereu-alex-interval-timer.apk"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
