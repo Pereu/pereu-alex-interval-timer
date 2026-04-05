@@ -7,6 +7,7 @@ val PrimaryLight = Color(0x141B9E5A)
 val Secondary = Color(0xFF3B82F6)
 val Orange = Color(0xFFE67E22)
 val OrangeLight = Color(0x14E67E22)
+val SecondaryLight = Color(0x143B82F6)
 val Error = Color(0xFFDC3545)
 
 val TextPrimary = Color(0xFF1A1D24)

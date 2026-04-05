@@ -5,17 +5,22 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.pereu.intervaltimer.R
 import com.pereu.intervaltimer.ui.theme.Orange
+import com.pereu.intervaltimer.ui.theme.OrangeLight
 import com.pereu.intervaltimer.ui.theme.Primary
 import com.pereu.intervaltimer.ui.theme.PrimaryLight
 import com.pereu.intervaltimer.ui.theme.Secondary
+import com.pereu.intervaltimer.ui.theme.SecondaryLight
 import com.pereu.intervaltimer.ui.theme.Surface
 import com.pereu.intervaltimer.ui.theme.TextPrimary
+import com.pereu.intervaltimer.ui.theme.TextSecondary
 import com.pereu.intervaltimer.ui.timer.screen.TimerCardState
 import com.pereu.intervaltimer.ui.timer.screen.TimerTopBarState
 
 enum class TimerStatus(
     val accentColor: Color,
     val bgColor: Color,
+    val titleColor: Color = TextSecondary,
+    val subTitleColor: Color = TextPrimary,
     @get:StringRes val statusRes: Int,
     @param:StringRes val subtitleRes: Int? = null
 ) {
@@ -26,17 +31,21 @@ enum class TimerStatus(
     ),
     Running(
         accentColor = Primary,
+        titleColor = Primary,
         bgColor = PrimaryLight,
         statusRes = R.string.timer_status_running
     ),
     Paused(
         accentColor = Orange,
-        bgColor = Color(0x14E67E22),
+        titleColor = Orange,
+        bgColor = OrangeLight,
         statusRes = R.string.timer_status_paused
     ),
     Completed(
         accentColor = Secondary,
-        bgColor = Color(0x143B82F6),
+        titleColor = Secondary,
+        subTitleColor = Secondary,
+        bgColor = SecondaryLight,
         statusRes = R.string.timer_status_completed,
         subtitleRes = R.string.timer_status_completed_subtitle
     )
@@ -49,7 +58,6 @@ data class TimerUiState(
     val intervals: List<IntervalUiState> = emptyList(),
     val currentIntervalIndex: Int = 0,
     val remainingIntervalTime: Int = 0,
-    val totalTime: Int = 0,
     val elapsedTime: Int = 0,
     val status: TimerStatus = TimerStatus.Idle
 )

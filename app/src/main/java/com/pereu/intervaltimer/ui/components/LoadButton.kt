@@ -1,12 +1,14 @@
 package com.pereu.intervaltimer.ui.components
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -34,13 +36,17 @@ fun PrimaryButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(Size.buttonHeight),
+            .height(Size.buttonHeight)
+            .then(
+                if (state.isLoading) Modifier.alpha(0.7f) else Modifier
+            ),
         enabled = state.enabled && !state.isLoading,
         shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(
             containerColor = state.containerColor,
-            disabledContainerColor = DisabledBg
-        )
+            disabledContainerColor = if (state.isLoading) PrimaryLight else DisabledBg
+        ),
+        border = if (state.isLoading) BorderStroke(Size.borderHeight, Primary) else null
     ) {
         if (state.isLoading) {
             CircularProgressIndicator(

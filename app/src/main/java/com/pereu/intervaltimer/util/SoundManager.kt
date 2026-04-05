@@ -8,24 +8,34 @@ import javax.inject.Singleton
 @Singleton
 class SoundManager @Inject constructor() {
 
-    private val toneGenerator = ToneGenerator(
-        AudioManager.STREAM_MUSIC,
-        ToneGenerator.MAX_VOLUME
-    )
+    private var toneGenerator: ToneGenerator? = createToneGenerator()
 
-    fun playStart() {
-        toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 3000)
+    private fun createToneGenerator() = try {
+        ToneGenerator(AudioManager.STREAM_MUSIC, ToneGenerator.MAX_VOLUME)
+    } catch (_: RuntimeException) {
+        null
     }
 
-    fun playIntervalChange() {
-        toneGenerator.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 300)
+    private fun play(tone: Int, durationMs: Int) {
+        try {
+            if (toneGenerator == null) {
+                toneGenerator = createToneGenerator()
+            }
+            toneGenerator?.startTone(tone, durationMs)
+        } catch (_: RuntimeException) {
+            toneGenerator = createToneGenerator()
+            toneGenerator?.startTone(tone, durationMs)
+        }
     }
 
-    fun playFinish() {
-        toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 200)
-    }
+    fun playStart() = play(ToneGenerator.TONE_CDMA_ABBR_ALERT, 3000)
+
+    fun playIntervalChange() = play(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 300)
+
+    fun playFinish() = play(ToneGenerator.TONE_CDMA_ABBR_ALERT, 200)
 
     fun release() {
-        toneGenerator.release()
+        toneGenerator?.release()
+        toneGenerator = null
     }
 }

@@ -124,7 +124,6 @@ private val previewTimerCardState = TimerCardState(
 private val previewTimerUiState = TimerUiState(
     topBarState = previewTimerTopBarState,
     timerCardState = previewTimerCardState,
-    totalTime = 900,
     elapsedTime = 0,
     status = TimerStatus.Idle,
     currentIntervalIndex = 0,

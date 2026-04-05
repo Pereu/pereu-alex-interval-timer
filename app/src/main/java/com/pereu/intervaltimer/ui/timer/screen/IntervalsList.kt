@@ -30,7 +30,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.pereu.intervaltimer.R
 import com.pereu.intervaltimer.ui.theme.CaptionStyle
 import com.pereu.intervaltimer.ui.theme.DisabledBg
@@ -126,7 +125,7 @@ fun IntervalItem(
             .background(Surface)
             .then(
                 if (isActive) Modifier.border(
-                    1.5.dp, activeColor, RoundedCornerShape(Radius.intervalItem)
+                    Size.borderHeight, activeColor, RoundedCornerShape(Radius.intervalItem)
                 ) else Modifier
             )
             .then(

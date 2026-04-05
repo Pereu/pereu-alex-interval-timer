@@ -18,6 +18,8 @@ object Size {
     val backButtonSize = 40.dp
     val badgeSize = 28.dp
     val iconSize = 72.dp
+    val borderHeight = 1.5.dp
+    val progressHeight = 4.dp
 }
 
 object Radius {

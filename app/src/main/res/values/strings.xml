@@ -14,6 +14,7 @@
     <string name="timer_topbar_paused">⏸ Пауза</string>
     <string name="timer_topbar_completed">Завершена</string>
     <string name="timer_progress_label">Прошло %1$s из %2$s</string>
+    <string name="timer_progress_label_completed">%1$s из %2$s</string>
     <string name="intervals_title">Интервалы</string>
     <string name="timer_btn_start">Старт</string>
     <string name="timer_btn_pause">Пауза</string>

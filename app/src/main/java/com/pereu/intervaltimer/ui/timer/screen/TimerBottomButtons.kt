@@ -17,6 +17,7 @@ import com.pereu.intervaltimer.ui.components.PrimaryButton
 import com.pereu.intervaltimer.ui.components.PrimaryButtonState
 import com.pereu.intervaltimer.ui.theme.DisabledText
 import com.pereu.intervaltimer.ui.theme.IntervalTimerTheme
+import com.pereu.intervaltimer.ui.theme.Orange
 import com.pereu.intervaltimer.ui.theme.Secondary
 import com.pereu.intervaltimer.ui.theme.Spacing
 import com.pereu.intervaltimer.ui.theme.TextPrimary
@@ -50,6 +51,7 @@ fun TimerBottomButtons(
                 PrimaryButton(
                     state = PrimaryButtonState(
                         titleRes = R.string.timer_btn_pause,
+                        containerColor = Orange,
                         icon = Icons.Default.Pause
                     ),
                     onClick = { onIntent(TimerIntent.Pause) }

@@ -2,7 +2,12 @@ package com.pereu.intervaltimer.ui.timer.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -15,9 +20,18 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.pereu.intervaltimer.R
-import com.pereu.intervaltimer.ui.theme.*
+import com.pereu.intervaltimer.ui.theme.BodyStyle
+import com.pereu.intervaltimer.ui.theme.Border
+import com.pereu.intervaltimer.ui.theme.CaptionStyle
+import com.pereu.intervaltimer.ui.theme.IntervalTimerTheme
+import com.pereu.intervaltimer.ui.theme.Radius
+import com.pereu.intervaltimer.ui.theme.Size
+import com.pereu.intervaltimer.ui.theme.Spacing
+import com.pereu.intervaltimer.ui.theme.StateStyle
+import com.pereu.intervaltimer.ui.theme.Surface
+import com.pereu.intervaltimer.ui.theme.TextSecondary
+import com.pereu.intervaltimer.ui.theme.TimerDisplayStyle
 import com.pereu.intervaltimer.ui.timer.TimerStatus
 
 @Immutable
@@ -35,14 +49,6 @@ data class TimerCardState(
 @Composable
 fun TimerCard(state: TimerCardState) {
 
-//    val progress = when (state.status) {
-//        TimerStatus.Idle -> 0f
-//        TimerStatus.Completed -> 1f
-//        else -> if (state.intervalTotalTime > 0)
-//            (state.intervalTotalTime - state.elapsedTime).toFloat() / state.intervalTotalTime
-//        else 0f
-//    }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,7 +60,7 @@ fun TimerCard(state: TimerCardState) {
                 shape = RoundedCornerShape(Radius.timerCard)
             )
             .border(
-                1.5.dp,
+                Size.borderHeight,
                 state.status.accentColor.copy(alpha = 0.3f),
                 RoundedCornerShape(Radius.timerCard)
             )
@@ -67,7 +73,7 @@ fun TimerCard(state: TimerCardState) {
             Text(
                 text = stringResource(state.status.statusRes),
                 style = StateStyle,
-                color = state.status.accentColor
+                color = state.status.titleColor
             )
 
             Spacer(modifier = Modifier.height(Spacing.xs))
@@ -78,7 +84,7 @@ fun TimerCard(state: TimerCardState) {
                 else
                     state.intervalTitle,
                 style = BodyStyle,
-                color = state.status.accentColor
+                color = state.status.subTitleColor
             )
 
             Spacer(modifier = Modifier.height(Spacing.l))
@@ -93,11 +99,19 @@ fun TimerCard(state: TimerCardState) {
             Spacer(modifier = Modifier.height(Spacing.s))
 
             Text(
-                text = stringResource(
-                    R.string.timer_progress_label,
-                    state.elapsedTimeFormatted,
-                    state.totalTimeFormatted
-                ),
+                text = when (state.status) {
+                    TimerStatus.Idle -> stringResource(R.string.timer_total_time_label)
+                    TimerStatus.Completed -> stringResource(
+                        R.string.timer_progress_label_completed,
+                        state.totalTimeFormatted,
+                        state.totalTimeFormatted
+                        )
+                    else ->  stringResource(
+                        R.string.timer_progress_label,
+                        state.elapsedTimeFormatted,
+                        state.totalTimeFormatted
+                    )
+                },
                 style = CaptionStyle,
                 color = TextSecondary
             )
@@ -108,7 +122,7 @@ fun TimerCard(state: TimerCardState) {
                 progress = { state.progress },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(4.dp)
+                    .height(Size.progressHeight)
                     .clip(RoundedCornerShape(Radius.progressBar)),
                 color = state.status.accentColor,
                 trackColor = Border
